@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import testData.Product;
+
 import java.time.Duration;
 import java.util.List;
 
@@ -13,12 +15,16 @@ public class ProductDetailesPage   {
     private WebDriver driver;
 
     private By productName = By.className("t-universal-product-details-heading-info__title");
-    private By productPrice = By.className("price");
+    private By totalPrice = By.className("price");
+
+    private By productPrice = By.className("price__integer");
     private By productImage = By.className("c-image");
     private By addToCartButton = By.className("c-universal-add-to-cart");
+    private By id = By.cssSelector(".t-universal-product-details-heading-info__prod-number");
 
 
     private  By options = By.cssSelector(".c-universal-options__option-swatch-container");
+
 
 
 
@@ -89,12 +95,23 @@ public class ProductDetailesPage   {
         return driver.findElement(productPrice).getText();
     }
 
+    public Product getProductInfo() {
+        String idProduct = driver.findElement(By.cssSelector(".t-universal-product-details-heading-info__prod-number"))
+                .getAttribute("data-sku").trim();
+        String name = driver.findElement(productName).getText().trim();
+        String price = driver.findElement(productPrice).getText().trim();
+        return new Product(name, price, idProduct);
+    }
+
+
+
+
     public boolean isProductNameDisaple() {
         return driver.findElement(productName).isDisplayed();
     }
 
     public boolean isProductPriceDisaple() {
-        return driver.findElement(productPrice).isDisplayed();
+        return driver.findElement(totalPrice).isDisplayed();
     }
 
     public boolean isProductImageDisaple() {
@@ -144,7 +161,7 @@ public class ProductDetailesPage   {
     }
 
 
-    public void AddProductsToCart(String Products,String Qty) throws InterruptedException {
+    public void AddProductsToCart(String Products,String Qty,List<Product> storeData) throws InterruptedException {
 
 
         Products = Products.replace("[", "").replace("]", "").trim();
@@ -183,20 +200,35 @@ public class ProductDetailesPage   {
             HP.search(productId);
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
             wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.cssSelector(".t-universal-product-details-heading-info__prod-number")
+            ));
+
+            wait = new WebDriverWait(driver, Duration.ofSeconds(50));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.cssSelector(".text-uppercase.c-universal-add-to-cart.is--large-btn.is--quaternary-btn.btn.btn-primary")
             ));
 
-
+            Product product = getProductInfo();
+            if (storeData != null) {
+                storeData.add(product);
+            }
 
             waitForAddToCartReady();
             addToCart();
+            Thread.sleep(3000);
             wait = new WebDriverWait(driver, Duration.ofSeconds(40));
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".c-button.c-icon-label-button.c-custom-sheet__close-button")));
             driver.findElement(By.cssSelector(".c-button.c-icon-label-button.c-custom-sheet__close-button")).click();
-        }
+            driver.get("https://certwcs.frontgate.com/");
+            Thread.sleep(3000);
 
+        }
 
     }
 
+
+    public void AddProductsToCart(String productIds, String qty) throws InterruptedException {
+        AddProductsToCart(productIds, qty, null);
+    }
 
 }

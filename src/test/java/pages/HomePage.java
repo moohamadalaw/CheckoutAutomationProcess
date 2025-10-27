@@ -56,7 +56,7 @@ public class HomePage {
         Actions actions = new Actions(driver);
         actions.moveToElement(signInElement).perform();
     }
-    public boolean isLoginSuccess(){
+    public boolean isLoginSuccess() throws InterruptedException {
         WebElement signInElement = driver.findElement(AccountButton);
         Actions actions = new Actions(driver);
         actions.moveToElement(signInElement).perform();

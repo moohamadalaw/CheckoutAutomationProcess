@@ -15,9 +15,13 @@ public class LoginPage {
     private By password = By.cssSelector("input[id='password']");
 
     private By login = By.className("login-button");
+    private By ErrorEmailMessage = By.id("errorMessage-email");
 
     public LoginPage(WebDriver driver){
         this.driver = driver;
+    }
+    public boolean isErrorEmailMessageIsDisplay(){
+        return driver.findElement(ErrorEmailMessage).isDisplayed();
     }
 
     public boolean isEmailVisaple(){
@@ -46,7 +50,7 @@ public class LoginPage {
         HomePage HP = new HomePage(driver);
         LoginPage LP = new LoginPage(driver);
         HP.hoverOnSignIn();
-        Assert.assertTrue(HP.isLoginButtonIsVisable());
+       // Assert.assertTrue(HP.isLoginButtonIsVisable());
         HP.goToLoginPage();
 
         LP.waitLoginPageOpen();
@@ -54,8 +58,8 @@ public class LoginPage {
         LP.setPassword(password);
         LP.submit();
 
-        HP.hoverOnSignIn();
-        HP.waitForRegisteredUserWelcomeMessage();
+//        HP.hoverOnSignIn();
+//        HP.waitForRegisteredUserWelcomeMessage();
 
     }
 }

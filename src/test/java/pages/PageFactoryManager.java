@@ -44,4 +44,8 @@ public class PageFactoryManager {
     public ReturningCustomerCheckoutPage getReturningCustomerCheckoutPage() {
         return new ReturningCustomerCheckoutPage(driver);
     }
+
+    public OrderSummaryPage getOrderSummaryPage(){
+        return new OrderSummaryPage(driver);
+    }
 }

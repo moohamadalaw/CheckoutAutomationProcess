@@ -84,10 +84,15 @@ public class ShippingPage {
     }
 
     public void UseThisAddrisButtonClick(){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("m-shipping-address-verfication__header-bar")));
 
-        driver.findElement(useThisAddrisButton).click();
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("m-shipping-address-verfication__header-bar")));
+
+            driver.findElement(useThisAddrisButton).click();
+        }catch (Exception e){
+            System.out.println("Address verification popup not found, skipping...");
+        }
     }
 
 

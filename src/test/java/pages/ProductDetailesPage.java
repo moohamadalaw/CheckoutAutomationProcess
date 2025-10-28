@@ -95,7 +95,8 @@ public class ProductDetailesPage   {
         return driver.findElement(productPrice).getText();
     }
 
-    public Product getProductInfo() {
+    public Product getProductInfo() throws InterruptedException {
+        waitForAddToCartReady();
         String idProduct = driver.findElement(By.cssSelector(".t-universal-product-details-heading-info__prod-number"))
                 .getAttribute("data-sku").trim();
         String name = driver.findElement(productName).getText().trim();

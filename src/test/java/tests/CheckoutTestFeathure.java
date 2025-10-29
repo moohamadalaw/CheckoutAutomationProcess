@@ -135,23 +135,6 @@ public class CheckoutTestFeathure extends BaseTest {
                                 String ZIP, String phone, String CreditCardNumber, String ExpiryDate,
                                 String ExpectedResult) throws InterruptedException {
 
-        System.out.println("==============================================");
-        System.out.println("🔹 ID: " + ID);
-        System.out.println("🔹 TestCase_Title: " + TestCase_Title);
-        System.out.println("🔹 UserType: " + UserType);
-        System.out.println("🔹 Email: " + Email);
-        System.out.println("🔹 Password: " + Password);
-        System.out.println("🔹 Products: " + Products);
-        System.out.println("🔹 Qty: " + Qty);
-        System.out.println("🔹 fName: " + fName);
-        System.out.println("🔹 lName: " + lName);
-        System.out.println("🔹 StreetAddress: " + StreetAddress);
-        System.out.println("🔹 ZIP: " + ZIP);
-        System.out.println("🔹 phone: " + phone);
-        System.out.println("🔹 CreditCardNumber: " + CreditCardNumber);
-        System.out.println("🔹 ExpiryDate: " + ExpiryDate);
-        System.out.println("🔹 ExpectedResult: " + ExpectedResult);
-        System.out.println("==============================================");
 
         test = extent.createTest("Checkout Test - " + TestCase_Title)
                 .assignCategory(UserType);

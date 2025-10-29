@@ -54,15 +54,20 @@ public static String getCellData(int RowNum, String ColumnName) throws Exception
             }
         }
 
+
         if (colNum == -1) {
             throw new Exception("Column '" + ColumnName + "' not found in Excel sheet.");
         }
 
+
+
         XSSFRow currentRow = ExcelWSheet.getRow(RowNum);
         if (currentRow == null) return "";
 
+
         XSSFCell cell = currentRow.getCell(colNum);
         if (cell == null) return "";
+
 
         switch (cell.getCellType()) {
             case STRING:
@@ -76,6 +81,8 @@ public static String getCellData(int RowNum, String ColumnName) throws Exception
                 } else {
                     return String.valueOf(numericValue);
                 }
+
+
 
             case BOOLEAN:
                 return String.valueOf(cell.getBooleanCellValue());
@@ -95,7 +102,7 @@ public static String getCellData(int RowNum, String ColumnName) throws Exception
     }
 }
 
-
+//XXXXXXXXXXX
     public static void setCellData(String Result, int RowNum, int ColNum) throws Exception {
         try {
             Row = ExcelWSheet.getRow(RowNum);
@@ -197,6 +204,67 @@ public static String getCellData(int RowNum, String ColumnName) throws Exception
                 if (fis != null) fis.close();
             } catch (Exception ignored) {
             }
+        }
+    }
+
+    public static String getCellDataByColumnValue(String colName, String val, String returnColumn) throws Exception {
+        try {
+            XSSFRow headerRow = ExcelWSheet.getRow(0);
+            int lookupColIndex = -1;
+            int returnColIndex = -1;
+
+            for (int i = 0; i < headerRow.getLastCellNum(); i++) {
+                String headerName = headerRow.getCell(i).getStringCellValue().trim();
+                if (headerName.equalsIgnoreCase(colName)) lookupColIndex = i;
+                if (headerName.equalsIgnoreCase(returnColumn)) returnColIndex = i;
+            }
+
+
+
+            if (lookupColIndex == -1 || returnColIndex == -1) return "";
+
+            for (int r = 1; r <= ExcelWSheet.getLastRowNum(); r++) {
+                XSSFRow currentRow = ExcelWSheet.getRow(r);
+                if (currentRow == null) continue;
+
+                XSSFCell lookupCell = currentRow.getCell(lookupColIndex);
+                if (lookupCell == null) continue;
+
+                String cellValue = lookupCell.toString().trim();
+                if (cellValue.equalsIgnoreCase(val.trim())) {
+                    XSSFCell returnCell = currentRow.getCell(returnColIndex);
+                    if (returnCell == null) return "";
+
+                    switch (returnCell.getCellType()) {
+                        case STRING:
+                            return returnCell.getStringCellValue().trim();
+
+                        case NUMERIC:
+                            double numericValue = returnCell.getNumericCellValue();
+                            long longValue = (long) numericValue;
+                            return (numericValue == longValue)
+                                    ? String.valueOf(longValue)
+                                    : String.valueOf(numericValue);
+
+                        case BOOLEAN:
+                            return String.valueOf(returnCell.getBooleanCellValue());
+
+                        case FORMULA:
+                            try {
+                                return returnCell.getStringCellValue();
+                            } catch (Exception e) {
+                                return String.valueOf(returnCell.getNumericCellValue());
+                            }
+
+                        case BLANK:
+                        default:
+                            return "";
+                    }
+                }
+            }
+            return "";
+        } catch (Exception e) {
+            return "";
         }
     }
 
